@@ -17,7 +17,7 @@ function geocode(address, cb){
     })
 }
 
-function forecast(lattitude, longitude, cb){
+function forecast(lattitude, longitude, location, cb){
     const wsURL = `http://api.weatherstack.com/current?access_key=${process.env.weatherstackKey}&query=${lattitude},${longitude}&units=f`;
     request({url: wsURL, json:true}, (err, res) => {
         if (err){
@@ -25,10 +25,7 @@ function forecast(lattitude, longitude, cb){
         } else if (res.body.error){
             cb("Invalid Coordinates", null);
         } else{
-            cb(
-                null, 
-                `${res.body.location.name}, ${res.body.location.region}: It is currently ${res.body.current.weather_descriptions[0]} and it is ${res.body.current.temperature} degrees.`
-            );
+            cb(null, `${location}: It is currently ${res.body.current.weather_descriptions[0]} and it is ${res.body.current.temperature} degrees.`);
         }
     })
 }
@@ -36,10 +33,10 @@ function forecast(lattitude, longitude, cb){
 function getWeather(address, cb){
     geocode(address, (err, gData) =>{
         if (err){
-            return console.log(err)
+            return console.log(err);
         }
-        forecast(gData.lattitude, gData.longitude, (err, data) =>{
-            cb(err, data)
+        forecast(gData.lattitude, gData.longitude, gData.location, (err, data) =>{
+            cb(err, data);
         })
     })
 }
