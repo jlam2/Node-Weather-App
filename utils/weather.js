@@ -2,16 +2,16 @@ const request = require('postman-request');
 
 function geocode(address, cb){
     const mbURL = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(address)}.json?access_token=${process.env.mapboxKey}&limit=1`;
-    request({url: mbURL, json:true}, (err, res) => {
+    request({url: mbURL, json:true}, (err, {body}) => {
         if(err){
             cb("Can't connect to geo services", null);
-        } else if(res.body.features.length == 0){
+        } else if(body.features.length == 0){
             cb("Invalid Location", null);
         } else{
             cb(null, {
-                lattitude: res.body.features[0].center[1], 
-                longitude: res.body.features[0].center[0],
-                location: res.body.features[0].place_name
+                lattitude: body.features[0].center[1], 
+                longitude: body.features[0].center[0],
+                location: body.features[0].place_name
             });
         }
     })
