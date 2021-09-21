@@ -1,10 +1,11 @@
 const request = require('postman-request');
+const getWeather = require('./utils/weather.js')
 
-const url = 'http://api.weatherstack.com/current?access_key=' + process.env.wsKey + '&query=NewYork';
 
-request({url: url}, (err, res) => {
-  if (err) throw err;
-  console.log(res);
+
+getWeather('Queens NY',  (err, data) => {
+  if (err){
+      return console.log(err)
+  } 
+  console.log(data)
 })
-
-console.log(url);
