@@ -25,7 +25,10 @@ function forecast(lattitude, longitude, location, cb){
         } else if (res.body.error){
             cb("Invalid Coordinates", null);
         } else{
-            cb(null, `${location}: It is currently ${res.body.current.weather_descriptions[0]} and it is ${res.body.current.temperature} degrees.`);
+            cb(null, {
+                location:location, 
+                forecast: `It is currently ${res.body.current.weather_descriptions[0]} and it is ${res.body.current.temperature} degrees.`
+            });
         }
     })
 }
@@ -33,7 +36,7 @@ function forecast(lattitude, longitude, location, cb){
 function getWeather(address, cb){
     geocode(address, (err, gData) =>{
         if (err){
-            return console.log(err);
+            return cb(err, null)
         }
         forecast(gData.lattitude, gData.longitude, gData.location, (err, data) =>{
             cb(err, data);
